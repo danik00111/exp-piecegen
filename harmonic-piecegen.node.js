@@ -10,17 +10,16 @@ class HarmonicGenerator {
   // ai generated code starts here
   weightedRoll(weights) {
     const cleaned = {};
-    for (const [key, weight] of Object.entries(weights)) {
-      if (weight < 0) {
-        console.warn(`"${key}"'s weight is ${weight}), setting to 0`);
-        cleaned[key] = 0;
-      } else cleaned[key] = weight;
-    }
+    for (const [k, w] of Object.entries(weights))
+      if (w<0) {
+        console.warn(`"${k}"'s weight is ${w}), setting to 0`);
+        cleaned[k] = 0;
+      } else cleaned[k] = weight;
     const entries = Object.entries(cleaned);
-    const total = entries.reduce((sum,[,w]) => sum+w,0);
+    const total = entries.reduce((sum,[,w])=>sum+w,0);
     let r = Math.random()*total;
-    for (const [k,w] of entries) {r-=w; if (r<=0) return k}
-    return entries[entries.length - 1][0];
+    for (const [k,w] of entries) {r-=w; if (r<=0) return k};
+    return entries[entries.length-1][0];
   }
   // ai generated code ends here
 
