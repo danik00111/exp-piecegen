@@ -11,6 +11,8 @@ Then, for every piece, it rolls a random piece, weighted by `1/(1+frequency) + d
 
 This formula was originally just `1/(1+frequency)`, but i realised that this had *zero* drought prevention, and therefore the second part was added.
 
+I attached five separate 1000-piece queues here for a quick preview.
+
 The piece generator is called "Harmonic" in reference to the harmonic series, because the first half of it resembles just that. Just a working name, though. I'm open to ideas on how to name it.
 
 And yea I did quite a bit of brainstorming with Grok to finally end up with this idea.
