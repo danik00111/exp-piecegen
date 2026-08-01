@@ -1,4 +1,4 @@
-It took quite a bit of brainstorming with Grok to finally end up with this piecegen.
+It took quite a bit of brainstorming with Grok to finally end up with the idea for this piecegen.
 
 The code was written entirely by me, in TextEdit, except for the weighted RNG part.
 
