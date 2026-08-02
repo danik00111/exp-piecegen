@@ -1,5 +1,5 @@
 class HarmonicGenerator {
-  constructor({ history=35, bag = 'ioljzst'.split(''), droughtboost=0.05 }={}) {
+  constructor({ history=35, bag = 'ioljzst'.split(''), droughtboost=1/12 }={}) {
     this.history = new Array(history).fill(null);
     this.bag = bag;
     this.droughts = {};
@@ -10,11 +10,12 @@ class HarmonicGenerator {
   // ai generated code starts here
   weightedRoll(weights) {
     const cleaned = {};
-    for (const [k, w] of Object.entries(weights))
+    for (const [k, w] of Object.entries(weights)) {
       if (w<0) {
         console.warn(`"${k}"'s weight is ${w}), setting to 0`);
         cleaned[k] = 0;
-      } else cleaned[k] = weight;
+      } else { cleaned[k] = w };
+    }
     const entries = Object.entries(cleaned);
     const total = entries.reduce((sum,[,w])=>sum+w,0);
     let r = Math.random()*total;
