@@ -1,9 +1,21 @@
+const normaliseWeights = obj => {
+  const ent = Object.entries(obj);
+  const scale = 10000 / ent.map(x=>x[1]).reduce((a,v)=>a+v,0);
+  const norm = ent.map(([k,v])=>[k,Math.round(v*scale)]);
+  return JSON.stringify(Object.fromEntries(norm));
+};
+const format = obj => JSON.stringify(Object.fromEntries(
+  Object.entries(obj).map(([k,v])=>[k,Math.round(v*100)/100])
+));
+
 class HarmonicGenerator {
-  constructor({ history=35, bag = 'ioljzst'.split(''), droughtboost=1/12 }={}) {
+// The exponent is very, very lenient, allowing 16~18 droughts to happen. In case that's what you're into. Adjust as you wish. I set it to [2,10] near the end of the file to basically cap droughts at 14~17.
+  constructor({ history=35, bag = 'ioljzst'.split(''), droughtboost=1/12, exponent = [1.5, 10] }={}) {
     this.history = new Array(history).fill(null);
     this.bag = bag;
     this.droughts = {};
     this.droughtboost=droughtboost;
+    [this.ebase, this.edelay] = exponent;
     bag.forEach(p => {this.droughts[p]=0});
   }
   
@@ -29,15 +41,32 @@ class HarmonicGenerator {
     this.bag.forEach(p => {freq[p]=0});
     this.history.forEach(p => { if(this.bag.includes(p)) freq[p]++ });
     this.bag.forEach(p => {
-      weights[p] = 1/(1+freq[p]) + this.droughtboost*this.droughts[p];
+      const harmonic = 1/(1+freq[p]);
+      const linear = this.droughtboost*this.droughts[p];
+      const exponential = this.ebase**(this.droughts[p]-this.edelay);
+      weights[p] = harmonic + linear + exponential;
     });
     const piece = this.weightedRoll(weights);
+    /*console.log(
+      'f' + format(freq)
+    + ' d' + format(this.droughts)
+    + ' w' + format(weights)
+    + ' => ' + piece
+    );*/ // debug
     this.bag.forEach(p => {this.droughts[p]++}); this.droughts[piece] = 0;
     this.history.push(piece); this.history.shift(); return piece;
   }
 }
 
-const generator = new HarmonicGenerator();
-let queue = '';
-for(let i=0; i<1000; i++) queue += generator.next();
-console.log(queue);
+const generator_v1_light = new HarmonicGenerator({history:35, droughtboost:0.05, exponent:[1,10]});
+const generator_v1_medium = new HarmonicGenerator({history:35, droughtboost:1/12, exponent:[1,10]});
+const generator_v2_medium = new HarmonicGenerator({history:35, droughtboost:1/12, exponent:[1.5,10]});
+const generator_v2_heavy = new HarmonicGenerator({history:35, droughtboost:1/12, exponent:[2,10]});
+// didn't experiment with changing the exponent's delay. i think 10 is the sweetspot for it to start ramping up.
+let queues = { v1_l:'', v1_m:'', v2_m:'', v2_h:'' };
+for(let i=0; i<1e4; i++) queues.v1_l += generator_v1_light.next();
+for(let i=0; i<1e4; i++) queues.v1_m += generator_v1_medium.next();
+for(let i=0; i<1e4; i++) queues.v2_m += generator_v2_medium.next();
+for(let i=0; i<1e4; i++) queues.v2_h += generator_v2_heavy.next();
+
+console.log(Object.entries(queues).map(x=>`${x[0]}: ${x[1]}`).join('\n\n'));
