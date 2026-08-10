@@ -10,12 +10,16 @@ const format = obj => JSON.stringify(Object.fromEntries(
 
 class HarmonicGenerator {
 // The exponent is very, very lenient, allowing 16~18 droughts to happen. In case that's what you're into. Adjust as you wish. I set it to [2,10] near the end of the file to basically cap droughts at 14~17.
-  constructor({ history=35, bag = 'ioljzst'.split(''), droughtboost=1/12, exponent = [1.5, 10] }={}) {
+  constructor({
+    bag = 'ioljzst'.split(''),
+    history=35, droughtboost=1/12,
+    ebase=1.5, edelay=10
+  }={}) {
     this.history = new Array(history).fill(null);
     this.bag = bag;
     this.droughts = {};
     this.droughtboost=droughtboost;
-    [this.ebase, this.edelay] = exponent;
+    [this.ebase, this.edelay] = [ebase, edelay];
     bag.forEach(p => {this.droughts[p]=0});
   }
   
@@ -58,10 +62,10 @@ class HarmonicGenerator {
   }
 }
 
-const generator_v1_light = new HarmonicGenerator({history:35, droughtboost:0.05, exponent:[1,10]});
-const generator_v1_medium = new HarmonicGenerator({history:35, droughtboost:1/12, exponent:[1,10]});
-const generator_v2_medium = new HarmonicGenerator({history:35, droughtboost:1/12, exponent:[1.5,10]});
-const generator_v2_heavy = new HarmonicGenerator({history:35, droughtboost:1/12, exponent:[2,10]});
+const generator_v1_light = new HarmonicGenerator({history:35, droughtboost:0.05, ebase:1});
+const generator_v1_medium = new HarmonicGenerator({history:35, droughtboost:1/12, ebase:1});
+const generator_v2_medium = new HarmonicGenerator({history:35, droughtboost:1/12, ebase:1.5}); // The default.
+const generator_v2_heavy = new HarmonicGenerator({history:35, droughtboost:1/12, ebase:2});
 // didn't experiment with changing the exponent's delay. i think 10 is the sweetspot for it to start ramping up.
 let queues = { v1_l:'', v1_m:'', v2_m:'', v2_h:'' };
 for(let i=0; i<1e4; i++) queues.v1_l += generator_v1_light.next();
