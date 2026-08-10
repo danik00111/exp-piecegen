@@ -9,7 +9,7 @@ This piecegen keeps track of two things:
 
 And takes one singular input:
 
-- how hard it should boost a droughted piece (`droughtboost=0.05` by default, although may set it higher)
+- how hard it should boost a droughted piece (`droughtboost=0.05` or `droughtboost=1/12` by default, play around with the value idk)
 
 Then, for every piece, it does a random roll, weighted by `1/(1+frequency) + droughtboost*drought`, where `frequency` is how many times the piece appears within the last `history` pieces and `drought` is how many pieces ago it last appeared.
 
