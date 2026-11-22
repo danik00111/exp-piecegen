@@ -9,7 +9,6 @@ const format = obj => JSON.stringify(Object.fromEntries(
 ));
 
 class HarmonicGenerator {
-// The exponent is very, very lenient, allowing 16~18 droughts to happen. In case that's what you're into. Adjust as you wish. I set it to [2,10] near the end of the file to basically cap droughts at 14~17.
   constructor({
     bag = 'ioljzst'.split(''),
     linear=1/8,
