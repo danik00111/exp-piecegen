@@ -4,7 +4,7 @@ It keeps track of every piece's drought counter (how long ago it last appeared, 
 
 This piecegen takes three number inputs (`linear`, `ebase`, `edelay`), which are all plugged into the formula below.
 
-Then, for every piece, it does a random roll, weighted by `d*linear + ebase**(d-edelay)`, where `d` is how many pieces ago it last appeared. So the function appears linear-ish until about `d=7`, where it starts to go exponential.
+Then, for every piece, it does a weighed random roll. Every piece's likelyhood of being rolled is proportional to `d*linear + ebase**(d-edelay)`, where `d` is how many pieces ago it last appeared. This function appears linear-ish until about `d=7`, where it starts to go exponential.
 Here are the approximate values for `d` from 0 to 19:
 ```
 0.0390 0.1835 0.3378 0.5067 0.6975
