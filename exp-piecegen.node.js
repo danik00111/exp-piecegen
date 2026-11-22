@@ -1,3 +1,4 @@
+// these two functions are just formatting.
 const normaliseWeights = obj => {
   const ent = Object.entries(obj);
   const scale = 100000 / ent.map(x=>x[1]).reduce((a,v)=>a+v,0);
@@ -7,14 +8,11 @@ const normaliseWeights = obj => {
 const format = obj => JSON.stringify(Object.fromEntries(
   Object.entries(obj).map(([k,v])=>[k,Math.round(v*10000)/10000])
 ));
+// they're only used for console.log debugging purposes (see last few lines of next()).
 
-class HarmonicGenerator {
-  constructor({
-    bag = 'ioljzst'.split(''),
-    linear=1/8,
-    exp=[1.5,8]
-  }={}) {
-    this.bag=bag; this.linear=linear; this.ebase=exp[0]; this.edelay=exp[1];
+class ExpGenerator {
+  constructor({ bag = 'ioljzst'.split(''), linear=1/8, ebase=1.5, edelay=8}={}) {
+    this.bag=bag; this.linear=linear; this.ebase=ebase; this.edelay=edelay;
     this.droughts = {}; bag.forEach(p => {this.droughts[p]=0});
   }
 
@@ -49,15 +47,16 @@ class HarmonicGenerator {
   // ai generated code ends here
 }
 
-const generator = new HarmonicGenerator({droughtboost:1/12, exp:[1.5,8]}); // The default.
+const generator = new ExpGenerator({droughtboost:1/12, ebase:1.5, edelay:8}); // The default.
 let queue = '';
-for(let i=0; i<1e6; i++) queue += generator.next();
-// console.log(queue);
-
+for(let i=0; i<1e5; i++) queue += generator.next();
+console.log(queue);
+/*
 const fs = require('node:fs');
 const path = require('node:path');
-const filePath = path.join(__dirname, 'output.txt');
+const filePath = path.join(__dirname, 'queue.txt');
 fs.writeFile(filePath, queue, (err) => {
-  if (err) { console.error('Error writing file:', err); return }
-  console.log('File written successfully');
+  if (err) { console.error('error writing file:', err); return }
+  console.log('queue sucessfully dumped to queue.txt (in the same folder as the nodejs file)');
 });
+*/
