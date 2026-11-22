@@ -50,7 +50,6 @@ class HarmonicGenerator {
 }
 
 const generator = new HarmonicGenerator({droughtboost:1/12, exp:[1.5,8]}); // The default.
-// didn't experiment with changing the exponent's delay. i think 10 is the sweetspot for it to start ramping up.
 let queue = '';
 for(let i=0; i<1e6; i++) queue += generator.next();
 // console.log(queue);
