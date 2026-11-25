@@ -39,4 +39,4 @@ Drought distribution of 1_000_000 pieces with the default settings, `{ linear=1/
 ```
 Rows of hashtags are rounded to nearest 0.25%.
 
-This formula was originally just `1/(1+frequency)`, but i realised that this had *zero* drought prevention, and therefore the linear part was added. And then I realised linear isn't enough, so the exponential part was added as well to introduce a soft-cap on drought length. And then I realised the harmonic sequence term does literally nothing so I removed it.
+This formula was originally just `1/(1+[times piece appeared in last 35 pieces])`, but i realised that this had *zero* drought prevention, and therefore the linear part was added. And then I realised linear isn't enough, so the exponential part was added as well to introduce a soft-cap on drought length. And then I realised the harmonic sequence term does literally nothing so I removed it.
