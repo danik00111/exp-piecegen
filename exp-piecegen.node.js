@@ -31,13 +31,13 @@ class ExpGenerator {
 
   // ai generated code starts here
   weightedRoll(weights) {
-    const cleaned = {};
-    for (const [k, w] of Object.entries(weights)) {
-      if (w<0) {
-        console.warn(`"${k}"'s weight is ${w}), setting to 0`);
-        cleaned[k] = 0;
-      } else cleaned[k] = w;
-    }
+  const cleaned = {};
+  for (const [k, w] of Object.entries(weights)) {
+    if (!Number.isFinite(w) || w<0) {
+      console.warn(`"${k}"'s weight is ${w}, setting to 0`);
+      cleaned[k] = 0;
+    } else cleaned[k] = w;
+  }
     const entries = Object.entries(cleaned);
     const total = entries.reduce((sum,[,w])=>sum+w,0);
     let r = Math.random()*total;
